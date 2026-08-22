@@ -2,7 +2,7 @@ import math
 import unittest
 
 from saturday.demo import run_story
-from saturday.material import Cell, Edge, Kind
+from saturday.material import Cell, Kind, Medium
 
 
 class MaterialTests(unittest.TestCase):
@@ -23,7 +23,7 @@ class MaterialTests(unittest.TestCase):
         self.assertEqual(one_jump.materializations, 1)
         self.assertEqual(small_steps.materializations, 40)
 
-    def test_rotate_is_a_distinct_local_dynamics(self):
+    def test_rotate_means_complex_conjugate_pole_pair(self):
         cell = Cell(
             Kind.ROTATE,
             alpha=0.0,
@@ -36,19 +36,96 @@ class MaterialTests(unittest.TestCase):
         self.assertAlmostEqual(cell.z.real, 0.0, places=12)
         self.assertAlmostEqual(cell.z.imag, 1.0, places=12)
 
-    def test_latch_survives_silence(self):
-        cell = Cell(Kind.LATCH, latch_threshold=0.5, alpha=0.2)
-        cell.process(1.0 + 0j, 0.0)
-        self.assertEqual(cell.latch, 1)
-        cell.materialize(1_000.0)
-        self.assertEqual(cell.latch, 1)
+    def test_clock_transport_and_amplitude_are_separate(self):
+        medium = Medium()
+        mass = Cell(
+            Kind.MASS,
+            kappa=1.0,
+            mass_write=0.0,
+            base_compute=2.0,
+            direct=1.0,
+            readout=0.0,
+        )
+        mass.mass = 1.0  # gamma = 0.5
+        medium.add_cell("mass", mass)
+        medium.add_cell("out", Cell(Kind.PASS), receiver=True)
+        medium.connect("mass", "out", delay=3.0, coupling=1.0)
 
-    def test_route_is_changed_by_repeated_waves(self):
-        edge = Edge("a", "b", coupling=0.5, plasticity=0.1, max_coupling=0.9)
+        obs = medium.run([(0.0, "mass", 1.0 + 0j)])[0]
+        self.assertAlmostEqual(obs.compute_time, 4.0)
+        self.assertAlmostEqual(obs.transport_time, 3.0)
+        self.assertAlmostEqual(obs.total_delay, 7.0)
+        self.assertAlmostEqual(abs(obs.amp), 1.0)
+
+    def test_latch_is_persistent_configuration_that_selects_route(self):
+        medium = Medium()
+        medium.add_cell(
+            "switch",
+            Cell(
+                Kind.LATCH,
+                latch_threshold=0.5,
+                base_compute=0.0,
+                direct=1.0,
+                readout=0.0,
+            ),
+        )
+        medium.add_cell("pos", Cell(Kind.PASS), receiver=True)
+        medium.add_cell("neg", Cell(Kind.PASS), receiver=True)
+        medium.connect("switch", "pos", delay=0.0, coupling=1.0, required_latch=1)
+        medium.connect("switch", "neg", delay=0.0, coupling=1.0, required_latch=-1)
+
+        before = medium.run([(0.0, "switch", 0.1 + 0j)])[0]
+        self.assertEqual(before.node, "neg")
+
+        medium.run([(1.0, "switch", 1.0 + 0j)])
+        medium.cells["switch"].materialize(1_000.0)
+        self.assertEqual(medium.cells["switch"].latch, 1)
+
+        after = medium.run([(1_001.0, "switch", 0.1 + 0j)])[0]
+        self.assertEqual(after.node, "pos")
+
+    def test_route_plasticity_competes_under_fixed_budget(self):
+        medium = Medium()
+        medium.add_cell(
+            "a",
+            Cell(Kind.PASS, base_compute=0.0, direct=1.0, readout=0.0),
+        )
+        medium.add_cell("b", Cell(Kind.PASS), receiver=True)
+        medium.add_cell("c", Cell(Kind.PASS), receiver=True)
+        medium.connect(
+            "a", "b", delay=0.0, coupling=0.4, plasticity=0.2, required_latch=1
+        )
+        medium.connect(
+            "a", "c", delay=0.0, coupling=0.4, plasticity=0.2, required_latch=-1
+        )
+
+        medium.cells["a"].latch = 1
+        initial_budget = sum(e.coupling for e in medium.edges.values())
         for t in range(8):
-            edge.transmit(1.0 + 0j, float(t))
-        self.assertGreater(edge.coupling, 0.5)
-        self.assertLessEqual(edge.coupling, 0.9)
+            medium.run([(float(t), "a", 1.0 + 0j)])
+
+        used = medium.edges[("a", "b")].coupling
+        unused = medium.edges[("a", "c")].coupling
+        self.assertGreater(used, 0.4)
+        self.assertLess(unused, 0.4)
+        self.assertAlmostEqual(used + unused, initial_budget, places=12)
+
+    def test_receiver_can_live_inside_causal_loop(self):
+        medium = Medium()
+        medium.add_cell(
+            "a", Cell(Kind.PASS, base_compute=0.0, direct=1.0, readout=0.0)
+        )
+        medium.add_cell(
+            "r",
+            Cell(Kind.PASS, base_compute=0.0, direct=1.0, readout=0.0),
+            receiver=True,
+            absorb=False,
+        )
+        medium.connect("a", "r", delay=1.0, coupling=1.0)
+        medium.connect("r", "a", delay=1.0, coupling=1.0)
+
+        obs = medium.run([(0.0, "a", 1.0 + 0j)], until=5.0)
+        self.assertEqual([o.time for o in obs], [1.0, 3.0, 5.0])
 
     def test_first_machine_separates_relaxing_and_persistent_history(self):
         result = run_story()
@@ -58,19 +135,28 @@ class MaterialTests(unittest.TestCase):
         conditioned = result["after_conditioning"]
         final = result["final"]
 
-        # Conditioning creates a temporary slow region.
-        self.assertLess(conditioned["mass_gamma"], 0.1)
-        self.assertGreater(immediate["delay"], baseline["delay"] * 5.0)
+        self.assertLess(conditioned["mass_gamma"], 0.2)
+        self.assertGreater(immediate["compute_delay"], baseline["compute_delay"] * 3.0)
+        self.assertAlmostEqual(
+            immediate["transport_delay"], baseline["transport_delay"], places=12
+        )
 
-        # MASS relaxes, so a much later probe speeds up again.
         self.assertGreater(final["mass_gamma"], conditioned["mass_gamma"])
-        self.assertLess(late["delay"], immediate["delay"])
+        self.assertLess(late["compute_delay"], immediate["compute_delay"])
 
-        # LATCH and structural route changes outlive the MASS transient.
+        self.assertEqual(baseline["receiver"], "out_neg")
+        self.assertEqual(immediate["receiver"], "out_pos")
+        self.assertEqual(late["receiver"], "out_pos")
         self.assertEqual(conditioned["latch"], 1)
         self.assertEqual(final["latch"], 1)
-        for coupling in final["route_couplings"].values():
-            self.assertGreater(coupling, 0.8)
+
+        couplings = final["route_couplings"]
+        self.assertGreater(couplings["latch->out_pos"], couplings["latch->out_neg"])
+        self.assertAlmostEqual(
+            couplings["latch->out_pos"] + couplings["latch->out_neg"],
+            0.8,
+            places=12,
+        )
 
 
 if __name__ == "__main__":
