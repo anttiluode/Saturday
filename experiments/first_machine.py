@@ -5,6 +5,15 @@ from pprint import pprint
 from saturday.demo import run_story
 
 
+def _probe_line(label: str, p: dict) -> str:
+    return (
+        f"{label:<15}: receiver={p['receiver']:<7} "
+        f"total={p['delay']:.4f}  compute={p['compute_delay']:.4f}  "
+        f"transport={p['transport_delay']:.4f}  |y|={p['amplitude']:.6f}  "
+        f"phase={p['phase']:+.4f}"
+    )
+
+
 def main() -> None:
     result = run_story()
 
@@ -18,10 +27,10 @@ def main() -> None:
     c = result["after_conditioning"]
     f = result["final"]
 
-    print(f"baseline probe : delay={b['delay']:.4f}  |y|={b['amplitude']:.6f}  phase={b['phase']:+.4f}")
+    print(_probe_line("baseline probe", b))
     print(f"after train    : MASS={c['mass']:.4f}  gamma={c['mass_gamma']:.5f}  LATCH={c['latch']:+d}")
-    print(f"immediate probe: delay={i['delay']:.4f}  |y|={i['amplitude']:.6f}  phase={i['phase']:+.4f}")
-    print(f"late probe     : delay={l['delay']:.4f}  |y|={l['amplitude']:.6f}  phase={l['phase']:+.4f}")
+    print(_probe_line("immediate probe", i))
+    print(_probe_line("late probe", l))
     print(f"after silence  : MASS={f['mass']:.4f}  gamma={f['mass_gamma']:.5f}  LATCH={f['latch']:+d}")
     print()
 
