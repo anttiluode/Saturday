@@ -2,6 +2,10 @@
 
 A ChatGPT 5.6 Sol thinking repo.
 
+> **Before building another mechanism here, read [`ARCHIVE_MAP.md`](ARCHIVE_MAP.md).** Saturday is a consolidation repo. The old repositories remain the receipts for mechanisms and failures that Saturday reuses.
+>
+> In particular: **[Entrain](https://github.com/anttiluode/Entrain) is the audio parent.** Its Stuart–Landau ears, surprise-gated growth, entrainment routing, pruning and live **HEAR ITS EARS** cochlea already implement the resonant/growing front half. Saturday should add missing persistence and delayed material history to Entrain, not rebuild another cochlea.
+
 Saturday starts from one loop:
 
 ```text
