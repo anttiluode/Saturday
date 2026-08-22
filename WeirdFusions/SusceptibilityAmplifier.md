@@ -4,6 +4,25 @@
 
 > Do not hype. Do not lie. Just show.
 
+## Status
+
+A first Python implementation now lives beside this note:
+
+```bash
+pip install numpy matplotlib pyaudio
+python susceptibility_amplifier.py --selftest
+python susceptibility_amplifier.py --list-devices
+python susceptibility_amplifier.py
+```
+
+The current program implements the three experimental arms below (`OPEN`, `FIXED`, `EDGE`), a deliberately narrow-band regenerative path, manual phase correction, a slow edge gain controller, delay-orbit readout, baseline orbit-distance measurement, CSV logging, and conservative fail-closed audio limits. It starts muted. `Esc` is an emergency mute.
+
+The local DSP/controller self-test currently checks five things before hardware is involved: lock-in amplitude recovery, hard output limiting under absurd requested gain, edge gain rising for a weak plant, edge gain falling for a strong plant, and delay-orbit sensitivity to a structural waveform change.
+
+It is not calibrated instrumentation yet. The first real result still has to come from the matched physical arms and controls described below.
+
+---
+
 ## Why this exists
 
 This came out of an accidental connection between several old PerceptionLab fossils and a new rendering accident.
@@ -142,6 +161,26 @@ recurrence / orbit thickness
 
 A stationary object does not need to "make a sound." It only needs to alter the physical transfer function enough that the edge controller must compensate.
 
+### What the first code actually feeds back
+
+The first implementation does **not** pass broadband microphone audio directly back to the speaker. Each block is lock-in-demodulated only at the selected mode frequency. That complex mode coefficient is then re-synthesised at the same frequency with the chosen phase correction and feedback gain.
+
+So the feedback path is intentionally a one-mode regenerative resonator:
+
+```text
+mic block
+   ↓
+complex coefficient at f0
+   ↓
+GAIN × exp(i PHASE)
+   ↓
+re-synthesised f0 tone
+   ↓
+speaker
+```
+
+This is both safer and cleaner for the first test: broadband squeal and unrelated room modes are excluded by construction. If the one-mode experiment survives its controls, later versions can widen the operator class deliberately.
+
 ---
 
 ## 4. The old phase-space obsession becomes useful here
@@ -166,6 +205,8 @@ Then measure deformation of the orbit:
 - distance between a baseline attractor and the current attractor.
 
 A perturbation may barely change gross amplitude yet strongly rotate, thicken, split or shift the reconstructed orbit.
+
+The current program's first orbit-distance metric deliberately stays simple. It takes the three-delay cloud, summarizes its centroid, covariance and radial statistics, records several seconds of baseline variation, and reports a standardized distance from that baseline. That is not sacred; it is simply a pre-existing falsifier more informative than eyeballing the pretty 3-D plot.
 
 So the working sentence becomes:
 
@@ -203,6 +244,8 @@ Same acoustic level as closely as practical, but with a fixed loop gain safely b
 **C. Edge-controlled feedback**
 
 Controller continuously adjusts loop gain / phase to hold the selected mode at the target amplitude just below self-oscillation.
+
+Version 1 automatically controls **gain** and exposes phase as a manual slider. That is intentional: the gain compensation is already a clean sensor channel, while simultaneous automatic gain-and-phase optimisation would make the first experiment harder to interpret. Automatic phase search is a later bet, not silently folded into the first test.
 
 The interesting quantity is not whether C changes. Everything changes. The question is whether the same physical perturbation is **more discriminable in C than A/B**.
 
@@ -334,12 +377,16 @@ Keep ordinary acoustic SPL comparable when comparing conditions. Otherwise a nea
 
 Acoustic positive feedback can jump from quiet to painfully loud extremely quickly.
 
-The first implementation must have, before any interesting science:
+The first implementation therefore starts muted and uses a narrow-band regenerated mode rather than raw broadband feedback. It also hard-limits the generated block, automatically mutes on unexpectedly high microphone RMS, counts callback xruns, and binds `Esc` to emergency mute.
+
+Those controls do **not** know the physical gain of the interface, power amp or loudspeaker. Start with the hardware monitor/output low.
+
+The apparatus must always retain:
 
 - conservative hardware/software output limit;
 - narrow-band filter;
 - instantaneous hard clip / limiter;
-- automatic gain reduction on threshold crossing;
+- automatic gain reduction or mute on threshold crossing;
 - watchdog mute if callback timing fails;
 - obvious physical mute / unplug path;
 - development at low speaker level and preferably with hearing protection / distance until bounded behaviour is verified.
@@ -408,19 +455,17 @@ What is ours to test is the particular cheap apparatus, the phase-space readout,
 
 ## 13. First implementation target
 
-Do not modify old Slider2 until the experiment is specified.
-
-A clean first program should expose only:
+Implemented in `susceptibility_amplifier.py`:
 
 ```text
 INPUT DEVICE
 OUTPUT DEVICE
 MODE FREQUENCY
-TARGET RMS
+TARGET MODE AMP
 MAX OUTPUT
-FEEDBACK GAIN
-PHASE DELAY
-EDGE CONTROLLER ON/OFF
+FIXED / EDGE FEEDBACK GAIN
+PHASE CORRECTION
+EDGE CONTROLLER ON/OFF (via arm selection)
 EMERGENCY MUTE
 
 plots:
@@ -428,27 +473,10 @@ plots:
   spectrum
   phase-space orbit
   controller gain
-  controller phase
   orbit distance from baseline
 ```
 
-And write one CSV row per analysis window:
-
-```text
-time,
-trial_id,
-arm,
-label_hidden,
-freq,
-rms,
-feedback_gain,
-phase_correction,
-peak_freq,
-q_estimate,
-orbit_distance,
-clip_count,
-xrun_count
-```
+CSV logging writes the experimental state every analysis window, including trial ID, arm, hidden label, mode amplitude/phase, output level, feedback gain, phase correction, spectral peak, rough Q estimate, orbit distance, clip count and xrun count.
 
 No "quantum" detector. No crystal harmonics. No meaning assigned to a shape before the controls say it carries information.
 
