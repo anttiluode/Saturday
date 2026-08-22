@@ -1,13 +1,12 @@
 """Small event-driven computational material.
 
-The point is deliberately modest: make MASS, ROTATE and LATCH local
-materials coexist on a sparse ROUTE graph and let waves both read and
-change that material.
+The point is deliberately modest: make several local dynamical capabilities
+coexist on a sparse ROUTE graph and let waves both read and change that material.
 
-This is not a brain simulator and the clock law is not a claim about
-General Relativity.  The useful abstraction is that local history can
-change local dynamical time and therefore change how later waves are
-transformed.
+This is not a brain simulator and the clock law is not a claim about General
+Relativity. The useful abstraction is that local history can change local
+dynamical time while transport, coupling, and readout remain separately
+inspectable mechanisms.
 """
 
 from __future__ import annotations
@@ -21,6 +20,14 @@ from typing import Dict, Iterable, List, Optional, Tuple
 
 
 class Kind(str, Enum):
+    """Convenience presets, not four mutually exclusive substances.
+
+    ROTATE has one strict dynamical meaning here: its free linear dynamics
+    contain one complex-conjugate pole pair. MASS is a slow state every Cell
+    may carry; LATCH is persistent configuration that routes/transforms later
+    events.
+    """
+
     MASS = "mass"
     ROTATE = "rotate"
     LATCH = "latch"
@@ -31,16 +38,18 @@ class Kind(str, Enum):
 class Cell:
     """One local piece of dynamical material.
 
-    Every cell carries a complex fast state ``z`` and a non-negative
-    slow ``mass``.  MASS/ROTATE/LATCH differ in their constitutive
-    dynamics, while ``mass`` controls the local clock
+    Every cell carries a complex fast state ``z`` and a non-negative slow
+    ``mass``. ``mass`` controls only the local execution clock
 
         gamma = 1 / (1 + kappa * mass).
 
-    The slow mass relaxes in ordinary/global time.  The fast state
-    evolves in accumulated local time.  Because the integral of gamma is
-    analytic while mass decays exponentially, a quiet cell can sleep and
-    be materialized exactly only when an event next touches it.
+    It does NOT directly change propagation delay, edge coupling, or signal
+    amplitude. Those are separate mechanisms.
+
+    The slow mass relaxes in ordinary/global time. The fast state evolves in
+    accumulated local time. Because the integral of gamma is analytic while
+    mass decays exponentially, a quiet cell can sleep and be materialized only
+    when an event next touches it.
     """
 
     kind: Kind
@@ -50,7 +59,7 @@ class Cell:
     kappa: float = 4.0
     mass_write: Optional[float] = None
     latch_threshold: float = 1.2
-    base_dwell: float = 1.0
+    base_compute: float = 1.0
     direct: float = 0.55
     readout: float = 0.45
 
@@ -72,20 +81,11 @@ class Cell:
 
     @property
     def gamma(self) -> float:
-        """Current local clock rate."""
+        """Current local execution-clock rate."""
         return 1.0 / (1.0 + self.kappa * self.mass)
 
     def _proper_dt(self, dt: float) -> float:
-        """Exact local time accumulated while mass relaxes for ``dt``.
-
-        If m(t) = m0 exp(-t/tau), then
-
-            integral dt / (1 + kappa*m(t))
-
-        has the closed form used below.  This is the tiny trick that
-        makes quiet periods genuinely lazy instead of simulated by many
-        no-op ticks.
-        """
+        """Exact local time accumulated while mass relaxes for ``dt``."""
         if dt <= 0.0:
             return 0.0
         a = self.kappa * self.mass
@@ -103,6 +103,7 @@ class Cell:
 
         local_dt = self._proper_dt(dt)
         if self.kind is Kind.ROTATE:
+            # Pole structure: -alpha +/- i*omega.
             self.z *= cmath.exp(complex(-self.alpha, self.omega) * local_dt)
         else:
             self.z *= math.exp(-self.alpha * local_dt)
@@ -114,9 +115,9 @@ class Cell:
     def process(self, wave: complex, t: float) -> Tuple[complex, float, float]:
         """Let one wave packet interact with this material.
 
-        Returns ``(output_wave, dwell_time, gamma_before_write)``.
-        The incoming wave changes both fast state and, depending on cell
-        kind, slower material state.
+        Returns ``(output_wave, compute_time, gamma_before_write)``.
+        ``compute_time`` is execution latency. Edge propagation time is kept
+        separately by Medium and is never inferred from gamma.
         """
         self.materialize(t)
         self.events_seen += 1
@@ -125,58 +126,50 @@ class Cell:
         if self.kind is Kind.LATCH and abs(wave.real) >= self.latch_threshold:
             self.latch = 1 if wave.real >= 0.0 else -1
 
-        # The wave becomes part of the local fast state.
         self.z += wave
+        output = self.direct * wave + self.readout * self.z
 
-        gate = 1.0
-        if self.kind is Kind.LATCH:
-            gate = 1.0 if self.latch > 0 else 0.2
-
-        output = gate * (self.direct * wave + self.readout * self.z)
-
-        # MASS is intentionally a low-bandwidth material: existing mass
-        # attenuates an arriving fast disturbance and also increases dwell.
-        if self.kind is Kind.MASS:
-            output *= math.sqrt(gamma_before)
-
-        # A wave leaves a slower residue.  Different material types write
-        # that residue with different strength.
+        # MASS is cross-cutting state: every cell may write some slow residue.
         self.mass += float(self.mass_write) * (abs(wave) ** 2)
 
-        # Lower local clock -> longer global residence time.
-        dwell = self.base_dwell / max(gamma_before, 1e-12)
-        return output, dwell, gamma_before
+        # gamma controls execution latency only.
+        compute_time = self.base_compute / max(gamma_before, 1e-12)
+        return output, compute_time, gamma_before
 
 
 @dataclass
 class Edge:
-    """Sparse ROUTE connection with slow use-dependent structure."""
+    """Sparse ROUTE with path delay, coupling, and a decaying use trace.
+
+    ``required_latch`` makes persistent configuration able to select topology:
+    an edge is live only when the source cell's latch matches that sign.
+    """
 
     src: str
     dst: str
     delay: float = 1.0
     coupling: float = 0.8
     plasticity: float = 0.0
-    max_coupling: float = 1.0
     trace: float = 0.0
     tau_trace: float = 50.0
+    required_latch: Optional[int] = None
     last_t: float = 0.0
+    initial_coupling: float = field(init=False)
 
-    def transmit(self, wave: complex, t: float) -> complex:
+    def __post_init__(self) -> None:
+        self.initial_coupling = self.coupling
+
+    def decay_trace(self, t: float) -> None:
         dt = t - self.last_t
         if dt > 0.0:
             self.trace *= math.exp(-dt / self.tau_trace)
+            self.last_t = t
 
-        # The present wave sees the old structure; its passage then leaves
-        # a slow structural consequence for later waves.
+    def transmit(self, wave: complex, t: float) -> complex:
+        """Transmit through current structure, then record route use."""
+        self.decay_trace(t)
         old_coupling = self.coupling
-        energy = abs(wave) ** 2
-        self.trace += energy
-        if self.plasticity:
-            self.coupling += (
-                self.plasticity * energy * (self.max_coupling - self.coupling)
-            )
-        self.last_t = t
+        self.trace += abs(wave) ** 2
         return old_coupling * wave
 
 
@@ -187,6 +180,27 @@ class _Event:
     node: str = field(compare=False)
     amp: complex = field(compare=False)
     ttl: int = field(compare=False, default=64)
+    origin_time: float = field(compare=False, default=0.0)
+    compute_elapsed: float = field(compare=False, default=0.0)
+    transport_elapsed: float = field(compare=False, default=0.0)
+    hops: int = field(compare=False, default=0)
+
+
+@dataclass(frozen=True)
+class Observation:
+    """One receiver observation with timing mechanisms separated."""
+
+    time: float
+    node: str
+    amp: complex
+    origin_time: float
+    compute_time: float
+    transport_time: float
+    hops: int
+
+    @property
+    def total_delay(self) -> float:
+        return self.time - self.origin_time
 
 
 class Medium:
@@ -196,19 +210,26 @@ class Medium:
         self.cells: Dict[str, Cell] = {}
         self.edges: Dict[Tuple[str, str], Edge] = {}
         self.outgoing: Dict[str, List[str]] = {}
-        self.receivers: set[str] = set()
+        # receiver name -> whether observing terminates propagation
+        self.receivers: Dict[str, bool] = {}
         self._seq = 0
 
-    # Higher-level code is allowed to manufacture and remove material.
-    def add_cell(self, name: str, cell: Cell, *, receiver: bool = False) -> None:
+    def add_cell(
+        self,
+        name: str,
+        cell: Cell,
+        *,
+        receiver: bool = False,
+        absorb: bool = True,
+    ) -> None:
         self.cells[name] = cell
         self.outgoing.setdefault(name, [])
         if receiver:
-            self.receivers.add(name)
+            self.receivers[name] = bool(absorb)
 
     def remove_cell(self, name: str) -> None:
         self.cells.pop(name, None)
-        self.receivers.discard(name)
+        self.receivers.pop(name, None)
         for src, dst in list(self.edges):
             if src == name or dst == name:
                 self.disconnect(src, dst)
@@ -227,25 +248,71 @@ class Medium:
         if src in self.outgoing and dst in self.outgoing[src]:
             self.outgoing[src].remove(dst)
 
+    def _edge_enabled(self, src: str, edge: Edge) -> bool:
+        if edge.required_latch is None:
+            return True
+        return self.cells[src].latch == edge.required_latch
+
+    def _rebalance_outgoing(self, src: str, t: float) -> None:
+        """Competitive plasticity under a fixed outgoing coupling budget.
+
+        Only plastic edges participate. Their decaying traces bias how the
+        initial total budget is divided; strengthening one therefore weakens
+        competitors rather than monotonically saturating every used route.
+        """
+        edges = [
+            self.edges[(src, dst)]
+            for dst in self.outgoing.get(src, [])
+            if self.edges[(src, dst)].plasticity > 0.0
+        ]
+        if len(edges) < 2:
+            return
+
+        for edge in edges:
+            edge.decay_trace(t)
+
+        budget = sum(edge.initial_coupling for edge in edges)
+        scores = [
+            edge.initial_coupling * (1.0 + edge.plasticity * edge.trace)
+            for edge in edges
+        ]
+        denom = sum(scores)
+        if denom <= 0.0:
+            return
+
+        for edge, score in zip(edges, scores):
+            edge.coupling = budget * score / denom
+
     def run(
         self,
         injections: Iterable[Tuple[float, str, complex]],
         *,
         until: float = math.inf,
-    ) -> List[Tuple[float, str, complex]]:
-        """Propagate timestamped wave packets until they hit receivers.
+    ) -> List[Observation]:
+        """Propagate timestamped wave packets and record receiver observations.
 
-        Directed graphs are the intended first use. ``ttl`` is kept on
-        internal events so later experiments can safely introduce cycles.
+        A receiver may be absorbing (default) or non-absorbing. Non-absorbing
+        receivers are inside the causal loop: they are observed and then keep
+        processing/forwarding the event. ``ttl`` prevents accidental infinite
+        recurrence when cycles are introduced.
         """
         queue: List[_Event] = []
-        received: List[Tuple[float, str, complex]] = []
+        received: List[Observation] = []
 
         for t, node, amp in injections:
             if node not in self.cells:
                 raise KeyError(node)
             self._seq += 1
-            heapq.heappush(queue, _Event(float(t), self._seq, node, complex(amp)))
+            heapq.heappush(
+                queue,
+                _Event(
+                    float(t),
+                    self._seq,
+                    node,
+                    complex(amp),
+                    origin_time=float(t),
+                ),
+            )
 
         while queue:
             event = heapq.heappop(queue)
@@ -253,26 +320,50 @@ class Medium:
                 break
 
             if event.node in self.receivers:
-                received.append((event.time, event.node, event.amp))
-                continue
+                received.append(
+                    Observation(
+                        time=event.time,
+                        node=event.node,
+                        amp=event.amp,
+                        origin_time=event.origin_time,
+                        compute_time=event.compute_elapsed,
+                        transport_time=event.transport_elapsed,
+                        hops=event.hops,
+                    )
+                )
+                if self.receivers[event.node]:
+                    continue
 
             cell = self.cells[event.node]
-            out_wave, dwell, _ = cell.process(event.amp, event.time)
+            out_wave, compute_time, _ = cell.process(event.amp, event.time)
             if event.ttl <= 0:
                 continue
 
+            transmissions = []
             for dst in self.outgoing.get(event.node, []):
                 edge = self.edges[(event.node, dst)]
+                if not self._edge_enabled(event.node, edge):
+                    continue
                 routed = edge.transmit(out_wave, event.time)
+                transmissions.append((edge, dst, routed))
+
+            # Rebalance after every live route saw the same pre-update structure.
+            self._rebalance_outgoing(event.node, event.time)
+
+            for edge, dst, routed in transmissions:
                 self._seq += 1
                 heapq.heappush(
                     queue,
                     _Event(
-                        event.time + dwell + edge.delay,
+                        event.time + compute_time + edge.delay,
                         self._seq,
                         dst,
                         routed,
                         event.ttl - 1,
+                        event.origin_time,
+                        event.compute_elapsed + compute_time,
+                        event.transport_elapsed + edge.delay,
+                        event.hops + 1,
                     ),
                 )
 
