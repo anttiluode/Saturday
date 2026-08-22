@@ -5,15 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Saturday — See What Hasn't Relaxed</title>
 <style>
-:root{color-scheme:dark;--bg:#090b10;--panel:#111621;--panel2:#171e2b;--line:#293347;--text:#eef3fb;--muted:#9da9ba;--a:#8fd3ff;--b:#ffcf70;--c:#9ef0b5;--d:#f29bd3;--danger:#ff8e8e}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#172033 0,#090b10 38rem);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1220px;margin:auto;padding:28px 18px 60px}h1{font-size:clamp(32px,6vw,68px);line-height:.95;margin:0 0 14px;letter-spacing:-.045em}.lede{max-width:830px;font-size:18px;color:#cbd5e3}.tag{display:inline-block;border:1px solid var(--line);padding:5px 9px;border-radius:999px;color:var(--a);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}.links{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 26px}.links a{color:var(--text);text-decoration:none;border-bottom:1px solid #59667c}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:linear-gradient(180deg,rgba(23,30,43,.96),rgba(14,18,27,.96));border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}.panel h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#c7d4e6;margin:0 0 10px}.media{position:relative;aspect-ratio:4/3;background:#05070b;border-radius:12px;overflow:hidden;border:1px solid #263044}.media video,.media canvas{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}.media video{transform:scaleX(-1);z-index:1}.media canvas{z-index:2}.badge{position:absolute;z-index:3;left:10px;bottom:10px;background:#090b10cc;border:1px solid #31405a;padding:5px 8px;border-radius:999px;font-size:12px}.controls{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}.controls button{border:1px solid #3c4b65;background:#182131;color:var(--text);border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}.controls button:hover{background:#202c40}.controls button.primary{background:#dcecff;color:#07101b;border-color:#dcecff}.controls button.warn{color:#ffd7d7}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{min-height:24px;color:var(--muted)}.switchrow{display:flex;align-items:center;gap:9px;margin:10px 0;color:#d8e1ec}.switchrow input{width:19px;height:19px}.meters{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}.meter{border:1px solid var(--line);background:#0c111a;border-radius:12px;padding:10px}.meter b{display:block;font-size:20px}.meter span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}.wide{grid-column:1/-1}.probeLegend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.explain{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.explain div{padding:12px;border-left:3px solid #4d5b73;background:#0c1119;border-radius:8px}.explain b{display:block;margin-bottom:4px}.explain small{color:var(--muted)}.note{color:var(--muted);max-width:950px;margin-top:18px}.probeCanvas{width:100%;height:260px;border:1px solid #263044;border-radius:12px;background:#070a0f}.stateCanvas{width:100%;aspect-ratio:2/1;border:1px solid #263044;border-radius:12px;background:#070a0f}label.range{display:grid;grid-template-columns:140px 1fr 54px;gap:10px;align-items:center;color:#cbd5e3;margin:8px 0}input[type=range]{width:100%}@media(max-width:820px){.grid{grid-template-columns:1fr}.meters,.explain{grid-template-columns:1fr 1fr}.wide{grid-column:auto}}@media(max-width:480px){.meters,.explain{grid-template-columns:1fr}label.range{grid-template-columns:1fr}.wrap{padding:20px 12px 45px}}
+:root{color-scheme:dark;--bg:#090b10;--panel:#111621;--line:#293347;--text:#eef3fb;--muted:#9da9ba;--a:#8fd3ff;--b:#ffcf70;--c:#9ef0b5;--d:#f29bd3}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#172033 0,#090b10 38rem);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:1220px;margin:auto;padding:28px 18px 60px}h1{font-size:clamp(32px,6vw,68px);line-height:.95;margin:0 0 14px;letter-spacing:-.045em}.lede{max-width:900px;font-size:18px;color:#cbd5e3}.tag{display:inline-block;border:1px solid var(--line);padding:5px 9px;border-radius:999px;color:var(--a);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}.links,.controls{display:flex;gap:10px;flex-wrap:wrap}.links{margin:18px 0 26px}.links a{color:var(--text);text-decoration:none;border-bottom:1px solid #59667c}.controls{margin:14px 0}.controls button{border:1px solid #3c4b65;background:#182131;color:var(--text);border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}.controls button:hover{background:#202c40}.controls button.primary{background:#dcecff;color:#07101b;border-color:#dcecff}.controls button.warn{color:#ffd7d7}.controls button:disabled{opacity:.45;cursor:not-allowed}.status{min-height:24px;color:var(--muted)}.switchrow{display:flex;align-items:center;gap:9px;margin:10px 0;color:#d8e1ec}.switchrow input{width:19px;height:19px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{background:linear-gradient(180deg,rgba(23,30,43,.96),rgba(14,18,27,.96));border:1px solid var(--line);border-radius:16px;padding:14px;min-width:0}.panel h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#c7d4e6;margin:0 0 10px}.media{position:relative;aspect-ratio:4/3;background:#05070b;border-radius:12px;overflow:hidden;border:1px solid #263044}.media video,.media canvas{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}.media video{transform:scaleX(-1);z-index:1}.media canvas{z-index:2;image-rendering:auto}.badge{position:absolute;z-index:3;left:10px;bottom:10px;background:#090b10cc;border:1px solid #31405a;padding:5px 8px;border-radius:999px;font-size:12px}.meters{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:12px}.meter{border:1px solid var(--line);background:#0c111a;border-radius:12px;padding:10px}.meter b{display:block;font-size:20px}.meter span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}.wide{grid-column:1/-1}.stateCanvas{width:100%;aspect-ratio:2/1;border:1px solid #263044;border-radius:12px;background:#070a0f}.probeCanvas{width:100%;height:260px;border:1px solid #263044;border-radius:12px;background:#070a0f}.probeLegend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:10px 0 16px}.step{background:#0c1119;border:1px solid #263044;border-radius:10px;padding:10px;color:#cbd5e3}.step b{color:white}.explain{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.explain div{padding:12px;border-left:3px solid #4d5b73;background:#0c1119;border-radius:8px}.explain b{display:block;margin-bottom:4px}.explain small,.note{color:var(--muted)}.note{max-width:980px;margin-top:18px}label.range{display:grid;grid-template-columns:140px 1fr 54px;gap:10px;align-items:center;color:#cbd5e3;margin:8px 0}input[type=range]{width:100%}@media(max-width:900px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.steps{grid-template-columns:1fr 1fr}.meters{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.steps,.meters,.explain{grid-template-columns:1fr}label.range{grid-template-columns:1fr}.wrap{padding:20px 12px 45px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <span class="tag">Saturday / live visual material</span>
   <h1>See what hasn't relaxed.</h1>
-  <p class="lede">Show the webcam something, remove the scene, then send the same synthetic visual probe through the material. Fast activity dies quickly. MASS relaxes slowly. LATCH keeps configuration. Competitive ROUTEs keep a longer structural trace.</p>
+  <p class="lede">The left image is the world. The right image is the <b>same current input</b> seen through material changed by earlier input. Remove the scene and the world goes gray; the material readout can remain structured. Return the webcam and compare raw world versus changed processor.</p>
   <div class="links"><a href="README.md">README</a><a href="ARCHIVE_MAP.md">Archive map</a><a href="KILL_LEDGER.md">Kill ledger</a><a href="ARCHIVE_EXCAVATION.md">Excavation ledger</a></div>
+
+  <div class="steps">
+    <div class="step"><b>1.</b> RESET, then RUN FIXED PROBE to make H₀.</div>
+    <div class="step"><b>2.</b> START CAMERA and stay/show an object for 5–10 s.</div>
+    <div class="step"><b>3.</b> REMOVE SCENE → GRAY. Compare world with MATERIAL EYE.</div>
+    <div class="step"><b>4.</b> RETURN CAMERA. Raw world is unchanged; MATERIAL EYE carries history.</div>
+  </div>
 
   <div class="controls">
     <button id="start" class="primary">START CAMERA</button>
@@ -27,9 +34,14 @@
 
   <div class="grid">
     <section class="panel">
-      <h2>Current world</h2>
+      <h2>Current world — untouched input</h2>
       <div class="media"><video id="video" playsinline muted></video><canvas id="world"></canvas><span id="worldBadge" class="badge">synthetic gray</span></div>
     </section>
+    <section class="panel">
+      <h2>Material eye — same input, changed processor</h2>
+      <div class="media"><canvas id="eye"></canvas><span id="eyeBadge" class="badge">internal readout / no stored pixels</span></div>
+    </section>
+
     <section class="panel">
       <h2>Fast activity — what is resonating now</h2>
       <canvas id="activity" class="stateCanvas" width="720" height="360"></canvas>
@@ -41,68 +53,79 @@
         <div class="meter"><b id="massMeter">0.000</b><span>mean MASS</span></div>
         <div class="meter"><b id="latchMeter">0</b><span>latched channels</span></div>
         <div class="meter"><b id="routeMeter">0.000</b><span>route imbalance</span></div>
-        <div class="meter"><b id="ageMeter">0.0 s</b><span>since scene removed</span></div>
+        <div class="meter"><b id="eyeDeltaMeter">0.000</b><span>material effect RMS</span></div>
+        <div class="meter"><b id="ageMeter">—</b><span>since scene removed</span></div>
       </div>
     </section>
-    <section class="panel">
-      <h2>Fixed probe — same input, different machine</h2>
-      <canvas id="probeChart" class="probeCanvas" width="720" height="260"></canvas>
+
+    <section class="panel wide">
+      <h2>Fixed probe — same diagnostic input, different machine</h2>
+      <canvas id="probeChart" class="probeCanvas" width="1000" height="260"></canvas>
       <div class="probeLegend"><span><i class="dot" style="background:#8fd3ff"></i>baseline H₀</span><span><i class="dot" style="background:#ffcf70"></i>current H</span><span><i class="dot" style="background:#9ef0b5"></i>|H−H₀|</span></div>
     </section>
+
     <section class="panel wide">
       <h2>Material controls</h2>
       <label class="range">MASS half-life <input id="tau" type="range" min="2" max="40" step="1" value="12"><output id="tauOut">12 s</output></label>
-      <label class="range">MASS write <input id="write" type="range" min="0" max="2" step="0.05" value="0.65"><output id="writeOut">0.65</output></label>
-      <label class="range">Latch threshold <input id="latchT" type="range" min="0.2" max="2.5" step="0.05" value="1.1"><output id="latchTOut">1.10</output></label>
-      <label class="range">Route plasticity <input id="plastic" type="range" min="0" max="1.5" step="0.05" value="0.45"><output id="plasticOut">0.45</output></label>
+      <label class="range">MASS write <input id="write" type="range" min="0" max="2" step="0.05" value="0.75"><output id="writeOut">0.75</output></label>
+      <label class="range">Latch threshold <input id="latchT" type="range" min="0.15" max="2.5" step="0.05" value="0.70"><output id="latchTOut">0.70</output></label>
+      <label class="range">Route plasticity <input id="plastic" type="range" min="0" max="1.5" step="0.05" value="0.60"><output id="plasticOut">0.60</output></label>
       <div class="explain">
-        <div><b>ROTATE</b><small>24 damped complex channels. Each is a visual resonator with a complex-conjugate pole pair.</small></div>
-        <div><b>MASS</b><small>Slow non-negative residue written by activation. It decays after the scene disappears.</small></div>
-        <div><b>LATCH</b><small>Persistent sign/configuration written only by strong coherent input. It changes which route a later probe uses.</small></div>
+        <div><b>ROTATE</b><small>24 localized damped complex receptive fields. MASS changes their local rotation/decay time, not their coupling amplitude.</small></div>
+        <div><b>MASS</b><small>Slow non-negative residue written by activation. It relaxes in global time while slowing local resonator time.</small></div>
+        <div><b>LATCH</b><small>Persistent signed configuration written by strong coherent local input. It changes later phase/routing.</small></div>
         <div><b>ROUTE</b><small>Two competing outputs per channel share a fixed budget. Strengthening one weakens the other.</small></div>
       </div>
     </section>
   </div>
-  <p class="note">This is deliberately not face recognition and not a pixel afterimage. The webcam is reduced to a small bank of oriented spatial-frequency projections. The claim tested here is only that exposure changes the processor, so an identical later diagnostic pattern produces a different channel response. Disable <b>MATERIAL MEMORY</b> for the matched live-tracking control.</p>
+  <p class="note">The MATERIAL EYE is a readout of the processor, not a claim that the system stores a face or reconstructs pixels. The 24 channels are six coarse image regions × four orientations, each with complex fast state plus slower material state. On gray, any structure you see on the right is internally generated by state that has not relaxed. The fixed probe remains the cleaner measurement.</p>
 </div>
 <script>
 (() => {
 'use strict';
-const N=24,W=64,H=48,TAU_FAST=.28,OMEGA=.9;
+const N=24,W=96,H=72,TAU_FAST=.32,OMEGA=3.2,SIGMA=.20;
 const $=id=>document.getElementById(id);
-const video=$('video'), world=$('world'), wctx=world.getContext('2d',{willReadFrequently:true});
-const activity=$('activity'), actx=activity.getContext('2d');
-const material=$('material'), mctx=material.getContext('2d');
-const probeChart=$('probeChart'), pctx=probeChart.getContext('2d');
-world.width=W;world.height=H;
-let stream=null,camera=false,removed=false,last=performance.now(),removedAt=null,raf=0;
-let probeBaseline=null,lastProbe=null;
+const video=$('video');
+const world=$('world'),wctx=world.getContext('2d',{willReadFrequently:true});
+const eye=$('eye'),ectx=eye.getContext('2d');
+const activity=$('activity'),actx=activity.getContext('2d');
+const material=$('material'),mctx=material.getContext('2d');
+const probeChart=$('probeChart'),pctx=probeChart.getContext('2d');
+world.width=eye.width=W;world.height=eye.height=H;
+let stream=null,camera=false,removed=false,last=performance.now(),removedAt=null;
+let probeBaseline=null,lastProbe=null,lastEyeRms=0;
+const patchNames=['TL','TC','TR','BL','BC','BR'];
 const ch=[];
-for(let i=0;i<N;i++){
-  const ori=(i%4)*Math.PI/4, band=Math.floor(i/4)%3, phase=(Math.floor(i/12))*Math.PI/2;
-  const freq=[2.0,3.5,5.0][band];
-  ch.push({ori,freq,phase,zr:0,zi:0,m:0,latch:0,evidence:0,traceP:0,traceN:0,routeP:.5,routeN:.5});
+for(let p=0;p<6;p++){
+  const px=p%3,py=Math.floor(p/3),cx=[.20,.50,.80][px],cy=[.30,.70][py];
+  for(let o=0;o<4;o++){
+    const ori=o*Math.PI/4,freq=2.4+0.65*((p+o)%3),phase=((p*2+o)%4)*Math.PI/2;
+    ch.push({patch:p,cx,cy,ori,freq,phase,zr:0,zi:0,m:0,latch:0,evidence:0,traceP:0,traceN:0,routeP:.5,routeN:.5});
+  }
 }
-function reset(){for(const c of ch){c.zr=c.zi=c.m=c.evidence=c.traceP=c.traceN=0;c.latch=0;c.routeP=c.routeN=.5}probeBaseline=null;lastProbe=null;removedAt=null;drawProbe();$('status').textContent='Material reset. Run the fixed probe to establish a baseline.'}
-function projection(gray,c){let re=0,im=0,n=0;const co=Math.cos(c.ori),si=Math.sin(c.ori);for(let y=0;y<H;y+=2){for(let x=0;x<W;x+=2){const u=((x-W/2)*co+(y-H/2)*si)/W;const a=2*Math.PI*c.freq*u+c.phase;const v=gray[y*W+x]-.5;re+=v*Math.cos(a);im+=v*Math.sin(a);n++}}return [re/n*10,im/n*10]}
-function analyze(gray,dt,writeMemory){const tau=+$('tau').value,eta=+$('write').value,lth=+$('latchT').value,plast=+$('plastic').value;const dm=Math.exp(-Math.LN2*dt/tau),df=Math.exp(-dt/TAU_FAST),rot=OMEGA*dt;for(const c of ch){const [ir,ii]=projection(gray,c);const rr=(c.zr*Math.cos(rot)-c.zi*Math.sin(rot))*df;const ri=(c.zr*Math.sin(rot)+c.zi*Math.cos(rot))*df;c.zr=rr+ir;c.zi=ri+ii;const amp=Math.hypot(ir,ii);c.m*=dm;c.evidence*=Math.exp(-dt/1.6);c.traceP*=Math.exp(-dt/8);c.traceN*=Math.exp(-dt/8);if(writeMemory&&$('memory').checked){c.m+=eta*amp*amp*dt;c.evidence+=ir*dt;if(Math.abs(c.evidence)>lth)c.latch=c.evidence>0?1:-1;if(c.latch>=0)c.traceP+=amp*amp*dt;else c.traceN+=amp*amp*dt;const scoreP=.5*(1+plast*c.traceP),scoreN=.5*(1+plast*c.traceN),s=scoreP+scoreN;c.routeP=scoreP/s;c.routeN=scoreN/s}else if(!$('memory').checked){c.m=0;c.latch=0;c.routeP=c.routeN=.5;c.traceP=c.traceN=c.evidence=0}}
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+function reset(){for(const c of ch){c.zr=c.zi=c.m=c.evidence=c.traceP=c.traceN=0;c.latch=0;c.routeP=c.routeN=.5}probeBaseline=null;lastProbe=null;removedAt=null;drawProbe();$('status').textContent='Material reset. Run the fixed probe once to establish H₀.'}
+function basis(c,x,y,quadrature=false){const dx=x/W-c.cx,dy=y/H-c.cy,env=Math.exp(-(dx*dx+dy*dy)/(2*SIGMA*SIGMA));const u=dx*Math.cos(c.ori)+dy*Math.sin(c.ori);const a=2*Math.PI*c.freq*u+c.phase+(quadrature?Math.PI/2:0);return env*(quadrature?Math.sin(a):Math.cos(a))}
+function projection(gray,c){let re=0,im=0,n=0;for(let y=0;y<H;y+=2){for(let x=0;x<W;x+=2){const dx=x/W-c.cx,dy=y/H-c.cy,env=Math.exp(-(dx*dx+dy*dy)/(2*SIGMA*SIGMA));if(env<.035)continue;const u=dx*Math.cos(c.ori)+dy*Math.sin(c.ori),a=2*Math.PI*c.freq*u+c.phase,v=gray[y*W+x]-.5;re+=v*Math.cos(a)*env;im+=v*Math.sin(a)*env;n+=env}}return n?[re/n*12,im/n*12]:[0,0]}
+function analyze(gray,dt,writeMemory){const tau=+$('tau').value,eta=+$('write').value,lth=+$('latchT').value,plast=+$('plastic').value;const dm=Math.exp(-Math.LN2*dt/tau);for(const c of ch){const [ir,ii]=projection(gray,c);const gamma=1/(1+2.2*c.m),localDt=dt*gamma,df=Math.exp(-localDt/TAU_FAST),rot=OMEGA*localDt,co=Math.cos(rot),si=Math.sin(rot);const rr=(c.zr*co-c.zi*si)*df,ri=(c.zr*si+c.zi*co)*df,drive=8*dt;c.zr=rr+ir*drive;c.zi=ri+ii*drive;const amp=Math.hypot(ir,ii);c.m*=dm;c.evidence*=Math.exp(-dt/1.7);c.traceP*=Math.exp(-dt/12);c.traceN*=Math.exp(-dt/12);if(writeMemory&&$('memory').checked){c.m+=eta*amp*amp*dt;c.evidence+=ir*dt;if(Math.abs(c.evidence)>lth)c.latch=c.evidence>0?1:-1;const sign=c.latch||Math.sign(ir)||1;if(sign>0)c.traceP+=amp*amp*dt;else c.traceN+=amp*amp*dt;const scoreP=.5*(1+plast*c.traceP),scoreN=.5*(1+plast*c.traceN),s=scoreP+scoreN;c.routeP=scoreP/s;c.routeN=scoreN/s}else if(!$('memory').checked){c.m=0;c.latch=0;c.routeP=c.routeN=.5;c.traceP=c.traceN=c.evidence=0}}
 }
-function materialResponse(gray){const out=[];for(const c of ch){const [r,i]=projection(gray,c);const gamma=1/(1+2.2*c.m);const sign=c.latch===0?1:c.latch;const rotatedR=r*Math.cos(.45*sign)-i*Math.sin(.45*sign);const route=c.latch<0?c.routeN:c.routeP;out.push(Math.hypot(rotatedR*gamma*route,i*gamma*(1.25-route)))}return out}
-function makeProbe(){const arr=[];for(let y=0;y<H;y++){for(let x=0;x<W;x++){const u=x/W,v=y/H;let s=0;for(let k=0;k<4;k++){const a=k*Math.PI/4;s+=Math.sin(2*Math.PI*(2.2+k*.8)*(u*Math.cos(a)+v*Math.sin(a))+.6*k)}arr.push(.5+.11*s)}}return arr}
+function materialResponse(gray){const out=[];for(const c of ch){const [r,i]=projection(gray,c),gamma=1/(1+2.2*c.m);const config=(c.latch||0)*.48,angle=1.25*gamma+config,co=Math.cos(angle),si=Math.sin(angle),rr=r*co-i*si,ri=r*si+i*co;const route=c.latch<0?c.routeN:c.routeP;out.push(Math.abs(route*rr+(1-route)*ri))}return out}
+function makeProbe(){const arr=new Float32Array(W*H);for(let y=0;y<H;y++){for(let x=0;x<W;x++){const u=x/W,v=y/H;let s=0;for(let k=0;k<4;k++){const a=k*Math.PI/4;s+=Math.sin(2*Math.PI*(2.1+k*.75)*(u*Math.cos(a)+v*Math.sin(a))+.53*k)}arr[y*W+x]=clamp(.5+.105*s)}}return arr}
 const probe=makeProbe();
-function runProbe(){lastProbe=materialResponse(probe);if(!probeBaseline)probeBaseline=lastProbe.slice();drawProbe();$('status').textContent=probeBaseline===lastProbe?'Probe baseline captured. Now show the material a scene.':'Fixed probe measured without writing new memory.'}
-function setBaseline(){if(!lastProbe)lastProbe=materialResponse(probe);probeBaseline=lastProbe.slice();drawProbe();$('status').textContent='Current material response stored as H₀ baseline.'}
+function runProbe(){const first=!probeBaseline;lastProbe=materialResponse(probe);if(first)probeBaseline=lastProbe.slice();drawProbe();$('status').textContent=first?'Probe baseline H₀ captured. Now expose the webcam material.':'Fixed probe measured again. Green bars are |H−H₀|.'}
+function setBaseline(){if(!lastProbe)lastProbe=materialResponse(probe);probeBaseline=lastProbe.slice();drawProbe();$('status').textContent='Current probe response stored as H₀ baseline.'}
 function getFrame(){if(camera&&!removed&&video.readyState>=2){wctx.save();wctx.scale(-1,1);wctx.drawImage(video,-W,0,W,H);wctx.restore();$('worldBadge').textContent='live webcam'}else{wctx.fillStyle='#808080';wctx.fillRect(0,0,W,H);$('worldBadge').textContent=removed?'scene removed / gray':'synthetic gray'}const im=wctx.getImageData(0,0,W,H).data,g=new Float32Array(W*H);for(let i=0,j=0;i<im.length;i+=4,j++)g[j]=(.2126*im[i]+.7152*im[i+1]+.0722*im[i+2])/255;return g}
-function heat(ctx,vals,mode){const cw=ctx.canvas.width,chh=ctx.canvas.height,cols=8,rows=3,pw=cw/cols,ph=chh/rows;ctx.fillStyle='#070a0f';ctx.fillRect(0,0,cw,chh);for(let i=0;i<N;i++){const x=(i%cols)*pw,y=Math.floor(i/cols)*ph;let v=vals[i];v=Math.max(0,Math.min(1,v));const hue=mode==='mass'?195-130*v:210+85*v;ctx.fillStyle=`hsl(${hue} 70% ${12+48*v}%)`;ctx.fillRect(x+2,y+2,pw-4,ph-4);ctx.fillStyle='rgba(255,255,255,.78)';ctx.font='12px system-ui';ctx.fillText(`${(ch[i].ori*180/Math.PI)|0}° / ${ch[i].freq.toFixed(1)}`,x+8,y+18);if(mode==='mass'){ctx.fillStyle=ch[i].latch>0?'#9ef0b5':ch[i].latch<0?'#f29bd3':'#7d8798';ctx.fillText(ch[i].latch===0?'·':ch[i].latch>0?'L+':'L−',x+8,y+35)}}}
-function drawStates(){const a=ch.map(c=>Math.min(1,Math.hypot(c.zr,c.zi)*.34)),mmax=Math.max(.15,...ch.map(c=>c.m));heat(actx,a,'act');heat(mctx,ch.map(c=>c.m/mmax),'mass');const mm=ch.reduce((s,c)=>s+c.m,0)/N,lc=ch.filter(c=>c.latch).length,ri=ch.reduce((s,c)=>s+Math.abs(c.routeP-c.routeN),0)/N;$('massMeter').textContent=mm.toFixed(3);$('latchMeter').textContent=lc;$('routeMeter').textContent=ri.toFixed(3);$('ageMeter').textContent=removedAt?((performance.now()-removedAt)/1000).toFixed(1)+' s':'—'}
-function drawProbe(){const ctx=pctx,cw=ctx.canvas.width,chh=ctx.canvas.height;ctx.clearRect(0,0,cw,chh);ctx.fillStyle='#070a0f';ctx.fillRect(0,0,cw,chh);ctx.strokeStyle='#273247';ctx.lineWidth=1;for(let y=1;y<4;y++){ctx.beginPath();ctx.moveTo(0,y*chh/4);ctx.lineTo(cw,y*chh/4);ctx.stroke()}if(!probeBaseline&&!lastProbe){ctx.fillStyle='#8d99aa';ctx.font='16px system-ui';ctx.fillText('Run the fixed probe. The first run becomes H₀.',22,38);return}const b=probeBaseline||lastProbe,c=lastProbe||b,max=Math.max(.001,...b,...c),bw=cw/N;for(let i=0;i<N;i++){const bh=b[i]/max*(chh-42),hh=c[i]/max*(chh-42),d=Math.abs(c[i]-b[i])/max*(chh-42);ctx.fillStyle='#8fd3ff99';ctx.fillRect(i*bw+2,chh-20-bh,bw*.26,bh);ctx.fillStyle='#ffcf70cc';ctx.fillRect(i*bw+bw*.34,chh-20-hh,bw*.26,hh);ctx.fillStyle='#9ef0b5cc';ctx.fillRect(i*bw+bw*.68,chh-20-d,bw*.22,d)}ctx.fillStyle='#8d99aa';ctx.font='11px system-ui';ctx.fillText('24 fixed orientation / spatial-frequency channels',10,14)}
-function tick(now){const dt=Math.min(.12,(now-last)/1000);last=now;const gray=getFrame();analyze(gray,dt,camera&&!removed);drawStates();raf=requestAnimationFrame(tick)}
-async function startCamera(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});video.srcObject=stream;await video.play();camera=true;removed=false;removedAt=null;$('remove').disabled=false;video.style.visibility='visible';$('world').style.opacity='0';$('status').textContent='Live webcam is driving the visual material. Move, turn, show an object, or simply stay in view for several seconds.'}catch(e){$('status').textContent='Camera unavailable: '+e.message+' — the synthetic probe still works.'}}
-function removeScene(){removed=true;removedAt=performance.now();video.style.visibility='hidden';$('world').style.opacity='1';$('status').textContent='Scene removed. The current-world panel is now truly gray; fast activity should die while MASS relaxes and LATCH/ROUTE can remain.'}
+function renderEye(gray){const out=ectx.createImageData(W,H);let ss=0;for(let y=0;y<H;y++){for(let x=0;x<W;x++){const idx=y*W+x,base=gray[idx];let slow=0,fast=0,gain=0,envsum=0;for(const c of ch){const dx=x/W-c.cx,dy=y/H-c.cy,env=Math.exp(-(dx*dx+dy*dy)/(2*SIGMA*SIGMA));if(env<.025)continue;const u=dx*Math.cos(c.ori)+dy*Math.sin(c.ori),a=2*Math.PI*c.freq*u+c.phase,cs=Math.cos(a),sn=Math.sin(a),ms=c.m/(.28+c.m),route=c.routeP-c.routeN,cfg=c.latch;slow+=env*ms*(.50*cfg+.70*route)*cs;fast+=env*(c.zr*cs-c.zi*sn)*.10;gain+=env*ms*(.35+.22*Math.abs(route)+.12*Math.abs(cfg));envsum+=env}if(envsum>0){slow/=Math.sqrt(envsum*4);fast/=Math.sqrt(envsum*4);gain/=envsum}const centered=base-.5;let v=.5+centered*(1+1.15*gain)+.22*slow+.10*Math.tanh(fast);v=clamp(v);const d=v-base;ss+=d*d;const j=idx*4;out.data[j]=Math.round(255*clamp(v+Math.max(d,0)*.42));out.data[j+1]=Math.round(255*clamp(v-Math.abs(d)*.10));out.data[j+2]=Math.round(255*clamp(v+Math.max(-d,0)*.55));out.data[j+3]=255}}ectx.putImageData(out,0,0);lastEyeRms=Math.sqrt(ss/(W*H));$('eyeDeltaMeter').textContent=lastEyeRms.toFixed(3);$('eyeBadge').textContent=removed?'gray input + internal state':'same scene through current material'}
+function heat(ctx,vals,mode){const cw=ctx.canvas.width,chh=ctx.canvas.height,cols=8,rows=3,pw=cw/cols,ph=chh/rows;ctx.fillStyle='#070a0f';ctx.fillRect(0,0,cw,chh);for(let i=0;i<N;i++){const x=(i%cols)*pw,y=Math.floor(i/cols)*ph,v=clamp(vals[i]);const hue=mode==='mass'?195-130*v:210+85*v;ctx.fillStyle=`hsl(${hue} 70% ${12+48*v}%)`;ctx.fillRect(x+2,y+2,pw-4,ph-4);ctx.fillStyle='rgba(255,255,255,.78)';ctx.font='12px system-ui';ctx.fillText(`${patchNames[ch[i].patch]} ${(ch[i].ori*180/Math.PI)|0}°`,x+8,y+18);if(mode==='mass'){ctx.fillStyle=ch[i].latch>0?'#9ef0b5':ch[i].latch<0?'#f29bd3':'#7d8798';ctx.fillText(ch[i].latch===0?'·':ch[i].latch>0?'L+':'L−',x+8,y+35)}}}
+function drawStates(){const a=ch.map(c=>clamp(Math.hypot(c.zr,c.zi)*.23)),mmax=Math.max(.12,...ch.map(c=>c.m));heat(actx,a,'act');heat(mctx,ch.map(c=>c.m/mmax),'mass');const mm=ch.reduce((s,c)=>s+c.m,0)/N,lc=ch.filter(c=>c.latch).length,ri=ch.reduce((s,c)=>s+Math.abs(c.routeP-c.routeN),0)/N;$('massMeter').textContent=mm.toFixed(3);$('latchMeter').textContent=lc;$('routeMeter').textContent=ri.toFixed(3);$('ageMeter').textContent=removedAt?((performance.now()-removedAt)/1000).toFixed(1)+' s':'—'}
+function drawProbe(){const ctx=pctx,cw=ctx.canvas.width,chh=ctx.canvas.height;ctx.fillStyle='#070a0f';ctx.fillRect(0,0,cw,chh);ctx.strokeStyle='#273247';for(let y=1;y<4;y++){ctx.beginPath();ctx.moveTo(0,y*chh/4);ctx.lineTo(cw,y*chh/4);ctx.stroke()}if(!probeBaseline&&!lastProbe){ctx.fillStyle='#8d99aa';ctx.font='16px system-ui';ctx.fillText('Run the fixed probe. The first run becomes H₀.',22,38);return}const b=probeBaseline||lastProbe,c=lastProbe||b,max=Math.max(.001,...b,...c),bw=cw/N;for(let i=0;i<N;i++){const bh=b[i]/max*(chh-42),hh=c[i]/max*(chh-42),d=Math.abs(c[i]-b[i])/max*(chh-42);ctx.fillStyle='#8fd3ff99';ctx.fillRect(i*bw+2,chh-20-bh,bw*.26,bh);ctx.fillStyle='#ffcf70cc';ctx.fillRect(i*bw+bw*.34,chh-20-hh,bw*.26,hh);ctx.fillStyle='#9ef0b5cc';ctx.fillRect(i*bw+bw*.68,chh-20-d,bw*.22,d)}ctx.fillStyle='#8d99aa';ctx.font='11px system-ui';ctx.fillText('24 localized orientation channels',10,14)}
+function tick(now){const dt=Math.min(.12,(now-last)/1000);last=now;const gray=getFrame();analyze(gray,dt,camera&&!removed);renderEye(gray);drawStates();requestAnimationFrame(tick)}
+async function startCamera(){try{if(!stream){stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});video.srcObject=stream;await video.play()}camera=true;removed=false;removedAt=null;$('remove').disabled=false;video.style.visibility='visible';$('world').style.opacity='0';$('start').textContent='CAMERA LIVE';$('status').textContent='Live webcam is driving the material. Watch raw world on the left and the changed material readout on the right.'}catch(e){$('status').textContent='Camera unavailable: '+e.message+' — the synthetic probe still works.'}}
+function removeScene(){removed=true;removedAt=performance.now();video.style.visibility='hidden';$('world').style.opacity='1';$('start').textContent='RETURN CAMERA';$('status').textContent='Scene removed. Left is truly gray. Any structured right-hand image is internal state; watch fast components fade while slower material remains.'}
 function bindRange(id,out,fmt){const el=$(id),o=$(out);const f=()=>o.value=fmt(+el.value);el.addEventListener('input',f);f()}
 bindRange('tau','tauOut',v=>v.toFixed(0)+' s');bindRange('write','writeOut',v=>v.toFixed(2));bindRange('latchT','latchTOut',v=>v.toFixed(2));bindRange('plastic','plasticOut',v=>v.toFixed(2));
-$('start').addEventListener('click',startCamera);$('remove').addEventListener('click',removeScene);$('probe').addEventListener('click',runProbe);$('baseline').addEventListener('click',setBaseline);$('reset').addEventListener('click',reset);$('memory').addEventListener('change',()=>{$('status').textContent=$('memory').checked?'Material memory enabled.':'Memory disabled: matched live-tracking control; persistent state is cleared every frame.'});
-reset();drawStates();last=performance.now();raf=requestAnimationFrame(tick);
+$('start').addEventListener('click',startCamera);$('remove').addEventListener('click',removeScene);$('probe').addEventListener('click',runProbe);$('baseline').addEventListener('click',setBaseline);$('reset').addEventListener('click',reset);$('memory').addEventListener('change',()=>{$('status').textContent=$('memory').checked?'Material memory enabled. Expose it again to write slow state.':'Memory disabled: persistent MASS/LATCH/ROUTE state is cleared every frame.'});
+reset();drawStates();last=performance.now();requestAnimationFrame(tick);
 })();
 </script>
 </body>
